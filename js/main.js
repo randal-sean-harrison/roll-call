@@ -294,6 +294,11 @@ function resetAppState() {
     counter.classList.add('d-none');
 }
 
+$("#start-over").on("click", function () {
+    // This is a hard reload—-bypassing the cached version of the page
+    window.location.reload(true);
+});
+
 // clipboard button ---------------------
 new Clipboard('.copier');
 
