@@ -109,7 +109,7 @@ document.getElementById('pdf-upload').addEventListener('change', async (e) => {
             }
 
             updateDisplay();
-            status.innerHTML = `<span class="text-success fw-bold"><i class="bi bi-check-circle"></i> Success! Extracted ${extractedData.length} students.</span>`;
+            status.innerHTML = `<span class="text-success fw-bold"><i class="bi bi-check-circle me-2"></i> Success! Extracted ${extractedData.length} students.</span>`;
 
         } catch (err) {
             console.error(err);

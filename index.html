@@ -46,6 +46,13 @@
    </head>
 
    <body class="d-flex flex-column min-vh-100">
+      <div class="container-fluid m-0 p-3 text-end">
+         <div class="container">
+            <button type="button" class="btn btn-outline-danger rounded-2"><i
+                  class="bi bi-arrow-clockwise me-2"></i>Start
+               Over</button>
+         </div>
+      </div>
       <nav class='navbar text-bg-white mb-5 p-3' data-bs-theme='light'>
          <div class='container-fluid d-block'>
             <div class="row">
@@ -145,34 +152,35 @@
                         <div class="d-flex justify-content-between mt-5">
                            <h5>Student Data Preview <span class="small-caps opacity-75 smaller">| JSON</span></h5>
 
-                           <div class="text-end">
-                              <button type="button" class="btn btn-primary copier"
-                                 data-clipboard-target="#json-display">
-                                 <i class="bi bi-clipboard-check me-2"></i>Copy
-                              </button>
-                           </div>
                         </div>
 
-
-                        <pre id="code-well" contenteditable="true"
-                           class="language-json"><code id="json-display">[]</code></pre>
-
+                        <div id="supra-code-well" class="rounded-2 p-3">
+                           <div class="text-end">
+                              <button type="button" class="btn btn-secondary copier"
+                                 data-clipboard-target="#json-display">
+                                 <i class="bi bi-clipboard-plus me-2"></i>Copy
+                              </button>
+                           </div>
+                           <pre id="code-well" contenteditable="true"
+                              class="language-json"><code id="json-display">[]</code></pre>
+                        </div>
                         <!-- Optional Downloads -->
                         <div class="card text-bg-white mt-5">
                            <div class="card-body">
                               <h4 class="card-title chocolate">Download the files</h4>
                               <h6 class="card-subtitle slategray">OPTIONAL</h6>
-                              <p class="my-2">If you find you need to download the student headshots or the JSON file,
+                              <p class="my-2">If you need to download the student headshots or the JSON file,
                                  you
                                  can
-                                 do that here.</p>
+                                 do that here:</p>
                            </div>
                            <ul class="list-group list-group-flush list-group-item-action pointer">
                               <li class="list-group-item text-bg-white"><span id="download-images"
-                                    class="bright-blue">Download Student Photos
+                                    class="bright-blue"><i class="bi bi-download me-3"></i>Download Student Photos
                                     (ZIP)</span></li>
                               <li class="list-group-item list-group-item-action pointer text-bg-white"><span
-                                    id="download-json" class="bright-blue">Download JSON file
+                                    id="download-json" class="bright-blue"><i class="bi bi-download me-3"></i>Download
+                                    JSON file
                                     (JSON)</span></li>
                            </ul>
                         </div>

@@ -19,6 +19,10 @@ body {
    white-space: pre-wrap;
 }
 
+#supra-code-well {
+   background-color: #001f3f !important;
+}  
+
 .loading {
    display: none;
 }
