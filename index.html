@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Roll Call</title>
+
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap"
+         rel="stylesheet">
+
+      <!-- Favicons -->
+      <link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-icon-57x57.png">
+      <link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-icon-60x60.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="img/favicons/apple-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="76x76" href="img/favicons/apple-icon-76x76.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="img/favicons/apple-icon-114x114.png">
+      <link rel="apple-touch-icon" sizes="120x120" href="img/favicons/apple-icon-120x120.png">
+      <link rel="apple-touch-icon" sizes="144x144" href="img/favicons/apple-icon-144x144.png">
+      <link rel="apple-touch-icon" sizes="152x152" href="img/favicons/apple-icon-152x152.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-icon-180x180.png">
+      <link rel="icon" type="image/png" sizes="192x192" href="img/favicons/android-icon-192x192.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="96x96" href="img/favicons/favicon-96x96.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="img/favicons/favicon-16x16.png">
+      <link rel="manifest" href="img/favicons/manifest.json">
+      <meta name="msapplication-TileColor" content="#ffffff">
+      <meta name="msapplication-TileImage" content="img/favicons/ms-icon-144x144.png">
+      <meta name="theme-color" content="#ffffff">
+
+      <!-- Bootstrap 5.3.x -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+      <!-- Code Well -->
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+
+      <!-- Bootstrap icons -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+      <link rel="stylesheet" href="css/main.css">
+
+   </head>
+
+   <body class="d-flex flex-column min-vh-100">
+      <nav class='navbar text-bg-white mb-5 p-3' data-bs-theme='light'>
+         <div class='container-fluid d-block'>
+            <div class="row">
+               <div class="col-sm-12">
+                  <p class="text-center"><a class='navbar-brand fs-3' href='#'><img class='img-fluid me-2'
+                           src='img/logo.png' width="200"></a></p>
+               </div>
+               <div class="col-sm-12">
+                  <p class="display-5 text-center">Meaningful mentorship begins with names</p>
+               </div>
+            </div>
+         </div>
+      </nav>
+
+      <main class="flex-shrink-0">
+         <div class="container pb-10" id="wrapper">
+
+
+            <!-- STEPS -->
+            <div class="accordion accordion-flush" id="accordion-98437813">
+               <div class="accordion-item border-0 p-4">
+                  <h2 class="accordion-header">
+                     <button class="accordion-button fs-3 bright-blue" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#53524188" aria-expanded="true" aria-controls="53524188">
+                        <i class="bi bi-1-circle-fill me-4 fs-1"></i>
+                        Download your course roster
+                     </button>
+                  </h2>
+
+                  <div id="53524188" class="accordion-collapse collapse show" data-bs-parent="#accordion-98437813">
+                     <div class="accordion-body">
+
+                        <!-- Download the course roster -->
+                        <p class="fs-5"><i class="bi bi-check-circle-fill me-4 fs-4 slategray opacity-75"></i>Visit <a
+                              href="https://academic-advisor-admin.nd.edu/" target="_blank">ND Student
+                              Photos</a> website to
+                           download any course roster to a familiar location, such as your desktop.</p>
+
+                        <p class="fs-5 alert alert-dark mt-5">
+                           <strong>If you need help</strong> downloading the
+                           roster, <span class="bright-blue text-decoration-underline" role="button"
+                              data-bs-toggle="modal" data-bs-target="#modal-steps">review these
+                              steps</span>.
+                        </p>
+
+                     </div>
+                  </div>
+               </div>
+               <div class="accordion-item border-0 p-4">
+                  <h2 class="accordion-header">
+                     <button class="accordion-button fs-3 bright-blue collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#30049648" aria-expanded="false" aria-controls="30049648">
+                        <i class="bi bi-2-circle-fill me-4 fs-1"></i>
+                        Extract Student Names &amp; Photos
+                     </button>
+                  </h2>
+                  <div id="30049648" class="accordion-collapse collapse" data-bs-parent="#accordion-98437813">
+                     <div class="accordion-body">
+
+                        <p class="fs-5"><i class="bi bi-check-circle-fill me-4 fs-4 slategray opacity-75"></i>Now, click
+                           "Choose File" to upload
+                           the course roster (PDF) you just downloaded. We'll extract student names and photos from that
+                           file.
+                        </p>
+
+                        <!-- Upload input for students pdf -->
+                        <form class="ms-5">
+                           <input type="file" id="pdf-upload" class="form-control" accept="application/pdf">
+                           <div id="status" class="mt-2 text-muted"></div>
+                        </form>
+
+
+                        <!-- Photos -->
+                        <!-- <p class="fs-5 mt-4"><i class="bi bi-check-circle-fill me-4 fs-4 slategray opacity-75"></i>Let's
+                        extract and download the student photos from the course roster.</p>
+                     <p class="ps-5"><button class="btn btn-primary" id="download-images">Download Student Photos
+                           (ZIP)</button>
+                     </p> -->
+
+                        <!-- JSON -->
+                        <!-- <p class="fs-5 mt-4"><i class="bi bi-check-circle-fill me-4 fs-4 slategray opacity-75"></i>Next,
+                        let's
+                        extract the JSON data linking student photos to their names. Save this file to the folder you
+                        created.</p>
+                     <p class="ps-5"> -->
+                        <!-- download button -->
+                        <!-- <button class="btn btn-primary" id="download-json">Download Student Data
+                           (JSON)</button> -->
+                        <!-- preview button -->
+                        <!-- <button type="button" class="btn btn-outline-primary rounded-2" id="preview-json"><span
+                              id="view-preview" class="">View</span><span id="hide-preview" class="d-none">Hide</span>
+                           Preview
+                           (JSON)</button> -->
+                        <!-- </p> -->
+
+                        <!-- Preview well ----------- -->
+                        <div class="d-flex justify-content-between mt-5">
+                           <h5>Student Data Preview <span class="small-caps opacity-75 smaller">| JSON</span></h5>
+
+                           <div class="text-end">
+                              <button type="button" class="btn btn-primary copier"
+                                 data-clipboard-target="#json-display">
+                                 <i class="bi bi-clipboard-check me-2"></i>Copy
+                              </button>
+                           </div>
+                        </div>
+
+
+                        <pre id="code-well" contenteditable="true"
+                           class="language-json"><code id="json-display">[]</code></pre>
+
+                        <!-- Optional Downloads -->
+                        <div class="card text-bg-white mt-5">
+                           <div class="card-body">
+                              <h4 class="card-title chocolate">Download the files</h4>
+                              <h6 class="card-subtitle slategray">OPTIONAL</h6>
+                              <p class="my-2">If you find you need to download the student headshots or the JSON file,
+                                 you
+                                 can
+                                 do that here.</p>
+                           </div>
+                           <ul class="list-group list-group-flush list-group-item-action pointer">
+                              <li class="list-group-item text-bg-white"><span id="download-images"
+                                    class="bright-blue">Download Student Photos
+                                    (ZIP)</span></li>
+                              <li class="list-group-item list-group-item-action pointer text-bg-white"><span
+                                    id="download-json" class="bright-blue">Download JSON file
+                                    (JSON)</span></li>
+                           </ul>
+                        </div>
+
+                     </div>
+                     <!-- preview well -->
+
+                  </div>
+               </div>
+
+               <div class="accordion-item border-0 p-4">
+                  <h2 class="accordion-header">
+                     <button class="accordion-button fs-3 bright-blue collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#47726413" aria-expanded="false" aria-controls="47726413">
+                        <i class="bi bi-3-circle-fill me-4 fs-1"></i>
+                        Roll Call
+                     </button>
+                  </h2>
+                  <div id="47726413" class="accordion-collapse collapse" data-bs-parent="#accordion-98437813">
+                     <div class="accordion-body">
+                        <div id="flashcard-controls" class="mb-5 d-flex justify-content-between">
+
+                           <!-- Generate flashcards button -->
+                           <button id="load-from-step2" class="btn btn-primary px-4">
+                              <i class="bi bi-person-badge me-2"></i>Generate Student Cards
+                           </button>
+
+                           <!-- Shuffle Cards button -->
+                           <button id="shuffle-cards" class="btn btn-primary text-nowrap d-none">
+                              <i class="bi bi-shuffle me-2"></i>Shuffle Order
+                           </button>
+
+                           <button id="reset-cards" class="btn btn-outline-danger text-nowrap d-none ms-2">
+                              <i class="bi bi-arrow-clockwise me-2"></i>Reset Deck
+                           </button>
+
+                           <span id="card-counter" class="ms-auto fs-5 fw-bold text-muted d-none"></span>
+                        </div>
+
+                        <div id="flashcard-container" class="row g-4 justify-content-center">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+         <!-- wrapper -->
+      </main>
+
+      <!-- MODAL --------------------------->
+      <div class="modal fade" id="modal-steps" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-steps"
+         aria-hidden="true">
+         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+               <div class="modal-header border-0 p-5 pb-0">
+                  <h3 class="modal-title fs-3">Steps to Downloading Course Roster</h3>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body py-2 px-5">
+
+                  <h5 class="mt-5 border-top pt-2 chocolate">Step 1</h5>
+                  <p class="fs-5">Visit <a href="https://academic-advisor-admin.nd.edu/" target="_blank">Student
+                        Photos</a> to download your course roster</p>
+                  <p class="fs-5"></p>
+                  <h5 class="mt-5 border-top pt-2 chocolate">Step 2</h5>
+                  <p class="fs-5">Select a <strong>term</strong> and select a <strong>class</strong></p>
+                  <img src="img/steps/step-1.png" width="100%" class="img-fluid shadow" alt="step 2">
+                  <h5 class="mt-5 border-top pt-2 chocolate">Step 3</h5>
+                  <p class="fs-5">Select <strong>'Photo View'</strong></p>
+                  <img src="img/steps/step-2.png" width="100%" class="img-fluid shadow" alt="step 3">
+                  <h5 class="mt-5 border-top pt-2 chocolate">Step 4</h5>
+                  <p class="fs-5">Select <strong>'Print Page'</strong></p>
+                  <img src="img/steps/step-3.png" width="100%" class="img-fluid shadow" alt="step 4">
+                  <h5 class="mt-5 border-top pt-2 chocolate">Step 5</h5>
+                  <p class="fs-5"><strong>Save the file</strong> as a PDF</p>
+                  <img src="img/steps/step-4.png" width="100%" class="img-fluid shadow" alt="step 4">
+                  <div class="alert alert-warning mt-5" role="alert">
+                     <i class="bi bi-pin-fill me-2"></i>FERPA-safe! All student faces are AI generated.
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-auto pt-4 text-bg-secondary text-white" id="footer-insert">
+         <div class="container">
+            <div class="row">
+               <div class="col-12 mb-0">
+                  <h4><a href="index.html" class="text-light opacity-50 text-decoration-none">Randal Sean Harrison,
+                        PhD</a></h4>
+                  <p class="text-light opacity-50">Emerging Technologies Librarian<br>
+                     Concurrent Teaching Professor</p>
+                  </h5>
+                  <p class="mt-2"><a class="text-white" href="https://randalseanharrison.com"
+                        target="_blank">randalseanharrison.com</a><br><a class="text-white"
+                        href="mailto:rharriso@nd.edu">rharriso@nd.edu</a></p>
+               </div>
+            </div>
+            <div class="row justify-content-between">
+
+               <div class="col-12 mt-3">
+                  <hr>
+                  <p class="fs-6 text-start mt-1 text-white opacity-50">
+                     &copy;
+                     <span id="footer-year" class="me-1"></span>
+                     Randal Sean Harrison, PhD
+                  </p>
+               </div>
+            </div>
+         </div>
+      </footer>
+
+      <!-- jquery (optional in BS v5.x) -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+         integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+      <!-- jquery ui (optional in BS v5.x)-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"
+         integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q=="
+         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+      <!-- boostrap bundle -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+         crossorigin="anonymous"></script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+      <!-- clipboard.js include -->
+      <script src="js/clipboard.min.js"></script>
+
+      <script src="js/main.js"></script>
+
+   </body>
+
+</html>
