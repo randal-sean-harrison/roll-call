@@ -284,7 +284,7 @@ function resetAppState() {
     // Reset Buttons
     const loadBtn = document.getElementById('load-from-step2');
     loadBtn.classList.remove('d-none');
-    loadBtn.innerText = "Generate Flashcards";
+    loadBtn.innerHTML = "<i class='bi bi-person-badge me-2'></i>Generate Student Cards";
     
     document.getElementById('shuffle-cards').classList.add('d-none');
     document.getElementById('reset-cards').classList.add('d-none');
