@@ -124,7 +124,7 @@ document.getElementById('pdf-upload').addEventListener('change', async (e) => {
 document.getElementById('load-from-step2').addEventListener('click', function() {
     if (extractedData.length === 0) {
         alert("Please complete Step 2 (PDF Extraction) first!");
-        return;
+        window.location.reload(true);
     }
 
     currentStudentList = [...extractedData];

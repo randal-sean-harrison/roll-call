@@ -48,7 +48,7 @@
    <body class="d-flex flex-column min-vh-100">
       <div class="container-fluid m-0 p-3 text-end">
          <div class="container">
-            <button type="button" class="btn btn-outline-danger rounded-2" id="start-over"><i
+            <button type="button" class="btn btn-danger rounded-2" id="start-over"><i
                   class="bi bi-arrow-clockwise me-2"></i>Start
                Over</button>
          </div>
@@ -62,8 +62,9 @@
                </div>
                <div class="col-sm-12">
                   <p class="display-5 text-center">Meaningful mentorship means knowing your students</p>
-                  <p class="fs-4 text-center">Use this app to learn your student's names while taking attendace. Foster
-                     deeper educational connections.</p>
+                  <p class="fs-4 text-center">Foster
+                     deeper educational connections. Use this app to learn your student's names while taking attendance.
+                  </p>
                </div>
             </div>
          </div>
@@ -108,7 +109,7 @@
                      <button class="accordion-button fs-3 bright-blue collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#30049648" aria-expanded="false" aria-controls="30049648">
                         <i class="bi bi-2-circle-fill me-4 fs-1"></i>
-                        Extract Student Names &amp; Photos
+                        Extract student names and photos
                      </button>
                   </h2>
                   <div id="30049648" class="accordion-collapse collapse" data-bs-parent="#accordion-98437813">
@@ -125,30 +126,6 @@
                            <input type="file" id="pdf-upload" class="form-control" accept="application/pdf">
                            <div id="status" class="mt-2 text-muted"></div>
                         </form>
-
-
-                        <!-- Photos -->
-                        <!-- <p class="fs-5 mt-4"><i class="bi bi-check-circle-fill me-4 fs-4 slategray opacity-75"></i>Let's
-                        extract and download the student photos from the course roster.</p>
-                     <p class="ps-5"><button class="btn btn-primary" id="download-images">Download Student Photos
-                           (ZIP)</button>
-                     </p> -->
-
-                        <!-- JSON -->
-                        <!-- <p class="fs-5 mt-4"><i class="bi bi-check-circle-fill me-4 fs-4 slategray opacity-75"></i>Next,
-                        let's
-                        extract the JSON data linking student photos to their names. Save this file to the folder you
-                        created.</p>
-                     <p class="ps-5"> -->
-                        <!-- download button -->
-                        <!-- <button class="btn btn-primary" id="download-json">Download Student Data
-                           (JSON)</button> -->
-                        <!-- preview button -->
-                        <!-- <button type="button" class="btn btn-outline-primary rounded-2" id="preview-json"><span
-                              id="view-preview" class="">View</span><span id="hide-preview" class="d-none">Hide</span>
-                           Preview
-                           (JSON)</button> -->
-                        <!-- </p> -->
 
                         <!-- Preview well ----------- -->
                         <div class="d-flex justify-content-between mt-5">
@@ -198,7 +175,7 @@
                      <button class="accordion-button fs-3 bright-blue collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#47726413" aria-expanded="false" aria-controls="47726413">
                         <i class="bi bi-3-circle-fill me-4 fs-1"></i>
-                        Roll Call
+                        Generate the flash cards
                      </button>
                   </h2>
                   <div id="47726413" class="accordion-collapse collapse" data-bs-parent="#accordion-98437813">
@@ -215,8 +192,8 @@
                               <i class="bi bi-shuffle me-2"></i>Shuffle Order
                            </button>
 
-                           <button id="reset-cards" class="btn btn-outline-danger text-nowrap d-none ms-2">
-                              <i class="bi bi-arrow-clockwise me-2"></i>Reset Deck
+                           <button id="reset-cards" class="btn btn-danger text-nowrap d-none ms-2">
+                              <i class="bi bi-arrow-clockwise me-2"></i>Reset all Cards
                            </button>
 
                            <span id="card-counter" class="ms-auto fs-5 fw-bold text-muted d-none"></span>
