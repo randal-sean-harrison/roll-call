@@ -197,6 +197,7 @@ function updateCounter() {
         document.getElementById('shuffle-cards').classList.add('d-none');
         document.getElementById('load-from-step2').classList.remove('d-none');
         document.getElementById('load-from-step2').innerText = "Restart Practice";
+        document.getElementById('download-attendance').classList.add('d-none');
     }
 }
 // --- HELPERS ---
@@ -257,6 +258,7 @@ document.getElementById('load-from-step2').addEventListener('click', function() 
     document.getElementById('shuffle-cards').classList.remove('d-none');
     document.getElementById('reset-cards').classList.remove('d-none'); // Add this line
     document.getElementById('card-counter').classList.remove('d-none');
+    document.getElementById('download-attendance').classList.remove('d-none');
     // ...
 });
 
@@ -297,6 +299,56 @@ function resetAppState() {
 $("#start-over").on("click", function () {
     // This is a hard reload—-bypassing the cached version of the page
     window.location.reload(true);
+});
+
+// --- ATTENDANCE DOWNLOADER ---
+
+// Helper to get YYYY-MM-DD-HH-mm-ss
+function getTimestamp() {
+    const now = new Date();
+    // padStart ensures leading zeros (e.g., '05' instead of just '5')
+    const pad = (n) => n.toString().padStart(2, '0');
+    
+    const datePart = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    const timePart = `${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+    
+    return `${datePart}-${timePart}`;
+}
+
+document.getElementById('download-attendance').addEventListener('click', function() {
+    // 1. Find all names currently remaining on the screen
+    // We look for the <h3> tags inside the cards that haven't been removed.
+    const remainingCards = document.querySelectorAll('.flashcard-wrapper h3');
+    let absentList = [];
+
+    remainingCards.forEach(cardTitle => {
+        // Add the text inside the h3 to our list
+        absentList.push(cardTitle.innerText);
+    });
+
+    // 2. Handle edge case where everyone is present
+    if (absentList.length === 0) {
+        alert("Everyone has been marked present! No names to download.");
+        return;
+    }
+
+    // 3. Join the array into a string separated by new lines (vertical list)
+    const fileContent = absentList.join('\n');
+
+    // 4. Create the Blob
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+
+    // 5. Generate filename with timestamp
+    const fileName = `attendance-${getTimestamp()}.txt`;
+
+    // 6. Trigger the download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link); // Required for FF
+    link.click();
+    document.body.removeChild(link); // Clean up
+    URL.revokeObjectURL(link.href);  // Clean up memory
 });
 
 // clipboard button ---------------------

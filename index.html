@@ -183,25 +183,35 @@
                   <div id="47726413" class="accordion-collapse collapse" data-bs-parent="#accordion-98437813">
                      <div class="accordion-body">
                         <div id="flashcard-controls" class="mb-5 d-flex justify-content-between">
+                           <div id="left-section">
+                              <!-- Generate flashcards button -->
+                              <button id="load-from-step2" class="btn btn-primary px-2">
+                                 <i class="bi bi-person-badge me-2"></i>Generate Student Cards
+                              </button>
 
-                           <!-- Generate flashcards button -->
-                           <button id="load-from-step2" class="btn btn-primary px-2">
-                              <i class="bi bi-person-badge me-2"></i>Generate Student Cards
-                           </button>
+                              <!-- Shuffle Cards button -->
+                              <button id="shuffle-cards" class="btn btn-primary text-nowrap d-none">
+                                 <i class="bi bi-shuffle me-2"></i>Shuffle Order
+                              </button>
 
-                           <!-- Shuffle Cards button -->
-                           <button id="shuffle-cards" class="btn btn-primary text-nowrap d-none">
-                              <i class="bi bi-shuffle me-2"></i>Shuffle Order
-                           </button>
+                              <button id="reset-cards" class="btn btn-danger text-nowrap d-none ms-2">
+                                 <i class="bi bi-arrow-clockwise me-2"></i>Reset all Cards
+                              </button>
 
-                           <button id="reset-cards" class="btn btn-danger text-nowrap d-none ms-2">
-                              <i class="bi bi-arrow-clockwise me-2"></i>Reset all Cards
-                           </button>
+                           </div>
 
-                           <span id="card-counter" class="ms-auto fs-5 fw-bold text-muted d-none"></span>
+                           <div id="right-section">
+                              <button id="download-attendance" class="btn btn-primary text-nowrap d-none">
+                                 <i class="bi bi-download me-2"></i>Download Attendance
+                              </button>
+
+                              <p id="card-counter" class="ms-auto mt-1 fs-5 fw-bold text-muted d-none"></p>
+                           </div>
+
                         </div>
 
                         <div id="flashcard-container" class="row g-4 justify-content-center">
+
                         </div>
                      </div>
                   </div>
