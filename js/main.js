@@ -9,7 +9,7 @@ let zip = new JSZip();
 // --- STEP 2: PDF EXTRACTION LOGIC ---
 
 document.getElementById('pdf-upload').addEventListener('change', async (e) => {
-    // TRIGGER THE RESET FIRST
+    // 1. Reset everything before starting a new upload
     resetAppState();
 
     const file = e.target.files[0];
@@ -29,7 +29,7 @@ document.getElementById('pdf-upload').addEventListener('change', async (e) => {
                 const textContent = await page.getTextContent();
                 const items = textContent.items;
 
-                // 1. Identify Name Font Size (Baseline)
+                // Identify Name Font Size (Baseline)
                 const classItem = items.find(item => item.str.includes("Classification"));
                 const detailFontSize = classItem ? classItem.height : 10;
                 const nameThreshold = detailFontSize * 1.1; 
@@ -37,12 +37,12 @@ document.getElementById('pdf-upload').addEventListener('change', async (e) => {
                 let currentNameParts = [];
                 let pageNames = [];
 
-                // 2. Filter items to isolate names
+                // Filter items to isolate names
                 for (let j = 0; j < items.length; j++) {
                     const item = items[j];
                     const text = item.str.trim();
 
-                    if (text.includes("Classification:")) {
+                    if (text.toLowerCase().includes("classification")) {
                         if (currentNameParts.length > 0) {
                             pageNames.push(currentNameParts.join(" ").trim());
                             currentNameParts = [];
@@ -52,7 +52,7 @@ document.getElementById('pdf-upload').addEventListener('change', async (e) => {
                     }
                 }
 
-                // 3. Image Extraction
+                // Image Extraction
                 const ops = await page.getOperatorList();
                 let imgCount = 0;
                 
@@ -89,11 +89,8 @@ document.getElementById('pdf-upload').addEventListener('change', async (e) => {
                                 }
 
                                 const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.95));
-                                
-                                // Save to ZIP
                                 zip.file(fileName, blob);
                                 
-                                // Save to Memory for Step 3 (Flashcards)
                                 const blobUrl = URL.createObjectURL(blob);
                                 imageMemoryMap[fileName] = blobUrl;
 
@@ -124,13 +121,15 @@ document.getElementById('pdf-upload').addEventListener('change', async (e) => {
 document.getElementById('load-from-step2').addEventListener('click', function() {
     if (extractedData.length === 0) {
         alert("Please complete Step 2 (PDF Extraction) first!");
-        window.location.reload(true);
+        return;
     }
 
     currentStudentList = [...extractedData];
     this.classList.add('d-none');
     document.getElementById('shuffle-cards').classList.remove('d-none');
+    document.getElementById('reset-cards').classList.remove('d-none');
     document.getElementById('card-counter').classList.remove('d-none');
+    document.getElementById('download-attendance').classList.remove('d-none');
     
     renderFlashcards(currentStudentList);
     updateCounter();
@@ -139,6 +138,13 @@ document.getElementById('load-from-step2').addEventListener('click', function() 
 document.getElementById('shuffle-cards').addEventListener('click', function() {
     const shuffled = shuffleArray([...currentStudentList]);
     renderFlashcards(shuffled);
+});
+
+document.getElementById('reset-cards').addEventListener('click', function() {
+    if (currentStudentList.length === 0) return;
+    renderFlashcards(currentStudentList);
+    updateCounter();
+    document.getElementById('flashcard-container').scrollIntoView({ behavior: 'smooth' });
 });
 
 function renderFlashcards(students) {
@@ -192,15 +198,75 @@ function updateCounter() {
         resetBtn.classList.remove('d-none');
     } else {
         counterEl.innerHTML = `<span class="text-success"><i class="bi bi-trophy-fill"></i> All Done!</span>`;
-        // Hide shuffle and reset when done to keep it clean, 
-        // or keep reset visible if you want them to restart immediately
         document.getElementById('shuffle-cards').classList.add('d-none');
         document.getElementById('load-from-step2').classList.remove('d-none');
-        document.getElementById('load-from-step2').innerText = "Restart Practice";
+        document.getElementById('load-from-step2').innerHTML = "<i class='bi bi-arrow-clockwise me-2'></i>Restart Practice";
         document.getElementById('download-attendance').classList.add('d-none');
     }
 }
-// --- HELPERS ---
+
+// --- ATTENDANCE DOWNLOADER ---
+
+function getTimestamp() {
+    const now = new Date();
+    const pad = (n) => n.toString().padStart(2, '0');
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}-${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+}
+
+document.getElementById('download-attendance').addEventListener('click', function() {
+    const remainingCards = document.querySelectorAll('.flashcard-wrapper h3');
+    let absentList = [];
+    remainingCards.forEach(cardTitle => absentList.push(cardTitle.innerText));
+
+    if (absentList.length === 0) {
+        alert("Everyone has been marked present!");
+        return;
+    }
+
+    const blob = new Blob([absentList.join('\n')], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `attendance-${getTimestamp()}.txt`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+});
+
+// --- HELPERS & UI STATE ---
+
+function resetAppState() {
+    extractedData = [];
+    imageMemoryMap = {};
+    currentStudentList = [];
+    zip = new JSZip();
+
+    // Reset UI Elements
+    document.getElementById('status').innerText = "";
+    document.getElementById('json-display').textContent = "[]";
+    document.getElementById('download-the-files').classList.add('d-none');
+    document.getElementById('flashcard-container').innerHTML = '';
+    
+    const loadBtn = document.getElementById('load-from-step2');
+    loadBtn.classList.remove('d-none');
+    loadBtn.innerHTML = "<i class='bi bi-person-badge me-2'></i>Generate Student Cards";
+    
+    document.getElementById('shuffle-cards').classList.add('d-none');
+    document.getElementById('reset-cards').classList.add('d-none');
+    document.getElementById('download-attendance').classList.add('d-none');
+    
+    const counter = document.getElementById('card-counter');
+    counter.innerText = "";
+    counter.classList.add('d-none');
+}
+
+function updateDisplay() {
+    const jsonStr = JSON.stringify(extractedData, null, 4);
+    const display = document.getElementById('json-display');
+    display.textContent = jsonStr;
+    if (window.Prism) Prism.highlightElement(display);
+
+    // Show the Download section now that data exists
+    document.getElementById('download-the-files').classList.remove('d-none');
+}
 
 function sanitizeName(name) {
     return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
@@ -214,17 +280,9 @@ function shuffleArray(array) {
     return array;
 }
 
-function updateDisplay() {
-    const jsonStr = JSON.stringify(extractedData, null, 4);
-    const display = document.getElementById('json-display');
-    display.textContent = jsonStr;
-    if (window.Prism) Prism.highlightElement(display);
-}
-
-// Download Handlers
+// Download Handlers (ZIP & JSON)
 document.getElementById('download-json').addEventListener('click', () => {
-    const jsonContent = JSON.stringify(extractedData, null, 4);
-    const blob = new Blob([jsonContent], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(extractedData, null, 4)], { type: 'application/json' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `student-data.json`;
@@ -239,140 +297,37 @@ document.getElementById('download-images').addEventListener('click', async () =>
     link.click();
 });
 
-// Handle Reset Button Click
-document.getElementById('reset-cards').addEventListener('click', function() {
-    if (currentStudentList.length === 0) return;
+// --- CUSTOM SNIPPETS & JQUERY ---
 
-    // We simply re-render the current list as it was
-    renderFlashcards(currentStudentList);
-    updateCounter();
-    
-    // Smooth scroll back to the top of the cards if they've scrolled down
-    document.getElementById('flashcard-container').scrollIntoView({ behavior: 'smooth' });
-});
-
-// Update the 'load-from-step2' click handler to show the reset button
-// Find this section in your current code and add the reset-cards line:
-document.getElementById('load-from-step2').addEventListener('click', function() {
-    // ... (existing code)
-    document.getElementById('shuffle-cards').classList.remove('d-none');
-    document.getElementById('reset-cards').classList.remove('d-none'); // Add this line
-    document.getElementById('card-counter').classList.remove('d-none');
-    document.getElementById('download-attendance').classList.remove('d-none');
-    // ...
-});
-
-function resetAppState() {
-    // 1. Clear Data Variables
-    extractedData = [];
-    imageMemoryMap = {};
-    currentStudentList = [];
-    zip = new JSZip();
-
-    // 2. Reset Step 2 UI (Extraction)
-    document.getElementById('status').innerText = "";
-    const jsonDisplay = document.getElementById('json-display');
-    jsonDisplay.textContent = "[]";
-    if (window.Prism) Prism.highlightElement(jsonDisplay);
-    
-    // Hide preview if it was open
-    $("#preview").addClass("d-none");
-    $("#view-preview").removeClass("d-none");
-    $("#hide-preview").addClass("d-none");
-
-    // 3. Reset Step 3 UI (Flashcards)
-    document.getElementById('flashcard-container').innerHTML = '';
-    
-    // Reset Buttons
-    const loadBtn = document.getElementById('load-from-step2');
-    loadBtn.classList.remove('d-none');
-    loadBtn.innerHTML = "<i class='bi bi-person-badge me-2'></i>Generate Student Cards";
-    
-    document.getElementById('shuffle-cards').classList.add('d-none');
-    document.getElementById('reset-cards').classList.add('d-none');
-    
-    const counter = document.getElementById('card-counter');
-    counter.innerText = "";
-    counter.classList.add('d-none');
-}
-
+// Reset the entire page
 $("#start-over").on("click", function () {
-    // This is a hard reload—-bypassing the cached version of the page
-    window.location.reload(true);
+    if(confirm("This will clear all data. Are you sure?")) {
+        window.location.reload(true);
+    }
 });
 
-// --- ATTENDANCE DOWNLOADER ---
-
-// Helper to get YYYY-MM-DD-HH-mm-ss
-function getTimestamp() {
-    const now = new Date();
-    // padStart ensures leading zeros (e.g., '05' instead of just '5')
-    const pad = (n) => n.toString().padStart(2, '0');
-    
-    const datePart = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-    const timePart = `${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
-    
-    return `${datePart}-${timePart}`;
+// Stop video in modal on close
+const myModalEl = document.getElementById('modal-explainer');
+if (myModalEl) {
+    myModalEl.addEventListener('hidden.bs.modal', function () {
+        const iframe = myModalEl.querySelector('iframe');
+        if (iframe) {
+            const iframeSrc = iframe.src;
+            iframe.src = '';
+            iframe.src = iframeSrc;
+        }
+    });
 }
 
-document.getElementById('download-attendance').addEventListener('click', function() {
-    // 1. Find all names currently remaining on the screen
-    // We look for the <h3> tags inside the cards that haven't been removed.
-    const remainingCards = document.querySelectorAll('.flashcard-wrapper h3');
-    let absentList = [];
-
-    remainingCards.forEach(cardTitle => {
-        // Add the text inside the h3 to our list
-        absentList.push(cardTitle.innerText);
-    });
-
-    // 2. Handle edge case where everyone is present
-    if (absentList.length === 0) {
-        alert("Everyone has been marked present! No names to download.");
-        return;
-    }
-
-    // 3. Join the array into a string separated by new lines (vertical list)
-    const fileContent = absentList.join('\n');
-
-    // 4. Create the Blob
-    const blob = new Blob([fileContent], { type: 'text/plain' });
-
-    // 5. Generate filename with timestamp
-    const fileName = `attendance-${getTimestamp()}.txt`;
-
-    // 6. Trigger the download
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
-    document.body.appendChild(link); // Required for FF
-    link.click();
-    document.body.removeChild(link); // Clean up
-    URL.revokeObjectURL(link.href);  // Clean up memory
-});
-
-
-// Stop the video playing when the modal window closes
-const myModalEl = document.getElementById('modal-explainer');
-
-myModalEl.addEventListener('hidden.bs.modal', function () {
-  const iframe = myModalEl.querySelector('iframe');
-  if (iframe) {
-    const iframeSrc = iframe.src;
-    iframe.src = '';         // Clear the src
-    iframe.src = iframeSrc;  // Restore the src
-  }
-});
-
-// clipboard button ---------------------
+// Clipboard Initialization
 new Clipboard('.copier');
 
+// Preview Toggle
 $("#preview-json").on("click", function () {
     $("#preview").toggleClass("d-none");
     $("#view-preview").toggleClass("d-none");
     $("#hide-preview").toggleClass("d-none");
 });
 
-// write year to footer
- const thisYear = new Date().getFullYear();
-      $("#footer-year").text(thisYear);
+// Footer Year
+$("#footer-year").text(new Date().getFullYear());
