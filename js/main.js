@@ -351,6 +351,19 @@ document.getElementById('download-attendance').addEventListener('click', functio
     URL.revokeObjectURL(link.href);  // Clean up memory
 });
 
+
+// Stop the video playing when the modal window closes
+const myModalEl = document.getElementById('modal-explainer');
+
+myModalEl.addEventListener('hidden.bs.modal', function () {
+  const iframe = myModalEl.querySelector('iframe');
+  if (iframe) {
+    const iframeSrc = iframe.src;
+    iframe.src = '';         // Clear the src
+    iframe.src = iframeSrc;  // Restore the src
+  }
+});
+
 // clipboard button ---------------------
 new Clipboard('.copier');
 

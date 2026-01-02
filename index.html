@@ -67,7 +67,8 @@
                   </p>
 
                   <!-- Explainer Video -->
-                  <p class="text-center mt-5"><button type="button" class="btn btn-outline-primary rounded-2 btn-lg"><i
+                  <p class="text-center mt-5"><button type="button" class="btn btn-outline-primary rounded-2 btn-lg"
+                        data-bs-toggle='modal' data-bs-target='#modal-explainer'><i
                            class="bi bi-camera-reels me-3"></i>How this works
                         ...</button></p>
 
@@ -228,7 +229,7 @@
          <!-- wrapper -->
       </main>
 
-      <!-- MODAL --------------------------->
+      <!-- STEPS MODAL --------------------------->
       <div class="modal fade" id="modal-steps" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-steps"
          aria-hidden="true">
          <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -264,17 +265,42 @@
          </div>
       </div>
 
+      <!-- EXPLAINER MODAL ------------------------------------------------------- -->
+      <div class='modal fade' id='modal-explainer' data-bs-keyboard='false' tabindex='-1'
+         aria-labelledby='modal-explainer' aria-hidden='true'>
+         <div class='modal-dialog modal-xl modal-dialog-centered'>
+            <div class='modal-content'>
+               <div class='modal-header'>
+                  <h1 class='modal-title fs-3'>How to use this app</h1><button type='button' class='btn-close'
+                     data-bs-dismiss='modal' aria-label='Close'></button>
+               </div>
+               <div class='modal-body'>
+
+                  <div style="position: relative; padding-bottom: 64.67065868263472%; height: 0;"><iframe
+                        src="https://www.loom.com/embed/ad62fbe3893d4324b9cd1eac57809a05" frameborder="0"
+                        webkitallowfullscreen mozallowfullscreen allowfullscreen
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
+
+               </div>
+            </div>
+         </div>
+      </div>
+
       <!-- Footer -->
       <footer class="mt-auto pt-3 pb-5 text-bg-secondary text-white" id="footer-insert">
          <div class="container">
             <div class="row">
 
-               <div class="col-12 mt-3">
-                  <p class="fs-6 text-start mt-1 text-white">
-                     <span class="opacity-50">&copy;</span>
+               <div class="col-sm-12 mt-3">
+                  <p class="fs-5 mt-1 text-white">
+                     <span class="opacity-75">&copy;</span>
                      <span id="footer-year" class="me-1 opacity-50"></span>
                      <a class="text-white" href="https://randalseanharrison.com" target="_blank">Randal Sean
                         Harrison, PhD</a>
+                  </p>
+                  <p class="fs-6 mt-2 text-white opacity-75"><em>This app DOES NOT save or share your
+                        data.</em>
                   </p>
                </div>
             </div>
