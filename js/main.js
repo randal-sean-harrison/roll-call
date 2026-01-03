@@ -306,19 +306,6 @@ $("#start-over").on("click", function () {
     }
 });
 
-// Stop video in modal on close
-const myModalEl = document.getElementById('modal-explainer');
-if (myModalEl) {
-    myModalEl.addEventListener('hidden.bs.modal', function () {
-        const iframe = myModalEl.querySelector('iframe');
-        if (iframe) {
-            const iframeSrc = iframe.src;
-            iframe.src = '';
-            iframe.src = iframeSrc;
-        }
-    });
-}
-
 // Clipboard Initialization
 new Clipboard('.copier');
 

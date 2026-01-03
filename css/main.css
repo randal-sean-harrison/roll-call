@@ -75,7 +75,7 @@ padding-bottom: 4rem;
 
 .accordion-body:first-child {
    background-color: #f7f9fc;
-   padding: 2rem 2rem 2rem 3rem;
+   padding: 2rem 1rem 1rem 1rem;
 }
 
 /* Target both the default and the active (opened) state */
