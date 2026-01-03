@@ -136,8 +136,24 @@ document.getElementById('load-from-step2').addEventListener('click', function() 
 });
 
 document.getElementById('shuffle-cards').addEventListener('click', function() {
-    const shuffled = shuffleArray([...currentStudentList]);
+    // 1. Find the names of students whose cards are still on the screen
+    const visibleNames = Array.from(document.querySelectorAll('.flashcard-wrapper h3'))
+                             .map(h3 => h3.innerText);
+    
+    // 2. Filter our data list to only include those still visible
+    const remainingStudents = currentStudentList.filter(student => 
+        visibleNames.includes(student.name)
+    );
+
+    // 3. If there are no cards left, do nothing
+    if (remainingStudents.length === 0) return;
+
+    // 4. Shuffle the filtered list and re-render
+    const shuffled = shuffleArray(remainingStudents);
     renderFlashcards(shuffled);
+    
+    // Optional: Update counter to ensure it stays in sync
+    updateCounter();
 });
 
 document.getElementById('reset-cards').addEventListener('click', function() {
@@ -197,10 +213,10 @@ function updateCounter() {
         counterEl.innerText = `${remaining} / ${total} Students Left`;
         resetBtn.classList.remove('d-none');
     } else {
-        counterEl.innerHTML = `<span class="text-success"><i class="bi bi-trophy-fill"></i> All Done!</span>`;
+        counterEl.innerHTML = `<span class="text-success me-4"><i class="bi bi-trophy-fill me-2"></i> Nice Work!</span>`;
         document.getElementById('shuffle-cards').classList.add('d-none');
         document.getElementById('load-from-step2').classList.remove('d-none');
-        document.getElementById('load-from-step2').innerHTML = "<i class='bi bi-arrow-clockwise me-2'></i>Restart Practice";
+        document.getElementById('load-from-step2').innerHTML = "<i class='bi bi-arrow-repeat text-nowrap p-2 me-1'></i>Restart";
         document.getElementById('download-attendance').classList.add('d-none');
     }
 }
