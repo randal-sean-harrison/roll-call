@@ -210,7 +210,7 @@ function updateCounter() {
     const resetBtn = document.getElementById('reset-cards');
     
     if (remaining > 0) {
-        counterEl.innerText = `${remaining} / ${total} Students Left`;
+        counterEl.innerText = `${remaining} / ${total} Students`;
         resetBtn.classList.remove('d-none');
     } else {
         counterEl.innerHTML = `<span class="text-success me-4"><i class="bi bi-trophy-fill me-2"></i> Nice Work!</span>`;
