@@ -29,79 +29,136 @@ document.getElementById('pdf-upload').addEventListener('change', async (e) => {
                 const textContent = await page.getTextContent();
                 const items = textContent.items;
 
-                // Identify Name Font Size (Baseline)
-                const classItem = items.find(item => item.str.includes("Classification"));
-                const detailFontSize = classItem ? classItem.height : 10;
-                const nameThreshold = detailFontSize * 1.1; 
+                let nameFont = "";
+                let firstNameY = -1;
+                
+                // Step A: Dynamically figure out the font and starting Y-coordinate of the names
+                for (let j = 0; j < items.length; j++) {
+                    const text = items[j].str.trim();
+                    if (text.toLowerCase().includes("classification")) {
+                        for (let k = j - 1; k >= 0; k--) {
+                            if (items[k].str.trim().length > 0) {
+                                nameFont = items[k].fontName; 
+                                firstNameY = items[k].transform[5]; 
+                                break;
+                            }
+                        }
+                        break; 
+                    }
+                }
 
                 let currentNameParts = [];
                 let pageNames = [];
 
-                // Filter items to isolate names
+                // Step B: Filter items to isolate names and ignore headers/details
                 for (let j = 0; j < items.length; j++) {
                     const item = items[j];
                     const text = item.str.trim();
+                    const itemY = item.transform[5];
 
+                    if (!text) continue;
+
+                    // Ignore the header box
+                    if (firstNameY !== -1 && itemY > firstNameY + 5) continue; 
+
+                    // Group by student
                     if (text.toLowerCase().includes("classification")) {
                         if (currentNameParts.length > 0) {
                             pageNames.push(currentNameParts.join(" ").trim());
                             currentNameParts = [];
                         }
-                    } else if (item.height >= nameThreshold && text.length > 1) {
+                    } 
+                    // Capture the bolded names
+                    else if (item.fontName === nameFont && text.length > 1) {
                         currentNameParts.push(text);
                     }
                 }
-
-                // Image Extraction
-                const ops = await page.getOperatorList();
-                let imgCount = 0;
                 
+                // Catch the very last name on the page
+                if (currentNameParts.length > 0) {
+                    pageNames.push(currentNameParts.join(" ").trim());
+                }
+
+                // Step C: Image Extraction
+                const ops = await page.getOperatorList();
+                let imgKeys = [];
+                
+                // 1. Gather all image IDs on the page
                 for (let j = 0; j < ops.fnArray.length; j++) {
                     if (ops.fnArray[j] === pdfjsLib.OPS.paintImageXObject) {
-                        if (pageNames[imgCount]) {
-                            const cleanName = pageNames[imgCount];
-                            const fileName = sanitizeName(cleanName) + ".jpg";
-                            const imgKey = ops.argsArray[j][0];
-                            
-                            try {
-                                const image = await page.objs.get(imgKey);
-                                const canvas = document.createElement('canvas');
-                                canvas.width = image.width;
-                                canvas.height = image.height;
-                                const ctx = canvas.getContext('2d');
-
-                                // Handle decoding to avoid 'black boxes'
-                                if (image.bitmap) {
-                                    ctx.drawImage(image.bitmap, 0, 0);
-                                } else {
-                                    const imgData = ctx.createImageData(image.width, image.height);
-                                    if (image.data.length === imgData.data.length) {
-                                        imgData.data.set(image.data);
-                                    } else {
-                                        for (let k = 0, l = 0; k < imgData.data.length; k += 4, l += 3) {
-                                            imgData.data[k] = image.data[l];
-                                            imgData.data[k+1] = image.data[l+1];
-                                            imgData.data[k+2] = image.data[l+2];
-                                            imgData.data[k+3] = 255;
-                                        }
-                                    }
-                                    ctx.putImageData(imgData, 0, 0);
-                                }
-
-                                const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.95));
-                                zip.file(fileName, blob);
-                                
-                                const blobUrl = URL.createObjectURL(blob);
-                                imageMemoryMap[fileName] = blobUrl;
-
-                                extractedData.push({
-                                    name: cleanName,
-                                    headshot: fileName
-                                });
-                            } catch (e) { console.error("Img error:", e); }
-                        }
-                        imgCount++;
+                        imgKeys.push(ops.argsArray[j][0]);
                     }
+                }
+
+                let validImages = [];
+                // 2. Filter out tiny icons and wide banners
+                for (let j = 0; j < imgKeys.length; j++) {
+                    try {
+                        const image = await page.objs.get(imgKeys[j]);
+                        if (image.width < 20 || image.height < 20) continue; // Skip tiny images
+                        if (image.width > image.height * 1.5) continue;      // Skip wide headers/logos
+                        
+                        validImages.push(imgKeys[j]);
+                    } catch (e) { /* ignore fetching errors */ }
+                }
+
+                let finalImageKeys = [];
+                // 3. THE MASK FIX: 
+                // Since taking index 0 gave us masks, the sequence is [Mask, Photo, Mask, Photo].
+                // We start our loop at 'j = 1' to grab the actual photos!
+                if (validImages.length >= pageNames.length * 2) {
+                    for (let j = 1; j < validImages.length; j += 2) {
+                        finalImageKeys.push(validImages[j]);
+                        if (finalImageKeys.length === pageNames.length) break; 
+                    }
+                } else {
+                    // Fallback just in case the PDF didn't double-layer them
+                    finalImageKeys = validImages.slice(0, pageNames.length);
+                }
+
+                // 4. Process the finalized images and pair them with names
+                for (let j = 0; j < finalImageKeys.length; j++) {
+                    if (!pageNames[j]) break; // Safety break if we run out of names
+
+                    const imgKey = finalImageKeys[j];
+                    const cleanName = pageNames[j];
+                    const fileName = sanitizeName(cleanName) + ".jpg";
+
+                    try {
+                        const image = await page.objs.get(imgKey);
+                        const canvas = document.createElement('canvas');
+                        canvas.width = image.width;
+                        canvas.height = image.height;
+                        const ctx = canvas.getContext('2d');
+
+                        if (image.bitmap) {
+                            ctx.drawImage(image.bitmap, 0, 0);
+                        } else {
+                            const imgData = ctx.createImageData(image.width, image.height);
+                            if (image.data.length === imgData.data.length) {
+                                imgData.data.set(image.data);
+                            } else {
+                                for (let k = 0, l = 0; k < imgData.data.length; k += 4, l += 3) {
+                                    imgData.data[k] = image.data[l];
+                                    imgData.data[k+1] = image.data[l+1];
+                                    imgData.data[k+2] = image.data[l+2];
+                                    imgData.data[k+3] = 255;
+                                }
+                            }
+                            ctx.putImageData(imgData, 0, 0);
+                        }
+
+                        const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.95));
+                        zip.file(fileName, blob);
+                        
+                        const blobUrl = URL.createObjectURL(blob);
+                        imageMemoryMap[fileName] = blobUrl;
+
+                        extractedData.push({
+                            name: cleanName,
+                            headshot: fileName
+                        });
+                    } catch (e) { console.error("Img error:", e); }
                 }
             }
 
@@ -136,23 +193,18 @@ document.getElementById('load-from-step2').addEventListener('click', function() 
 });
 
 document.getElementById('shuffle-cards').addEventListener('click', function() {
-    // 1. Find the names of students whose cards are still on the screen
     const visibleNames = Array.from(document.querySelectorAll('.flashcard-wrapper h3'))
                              .map(h3 => h3.innerText);
     
-    // 2. Filter our data list to only include those still visible
     const remainingStudents = currentStudentList.filter(student => 
         visibleNames.includes(student.name)
     );
 
-    // 3. If there are no cards left, do nothing
     if (remainingStudents.length === 0) return;
 
-    // 4. Shuffle the filtered list and re-render
     const shuffled = shuffleArray(remainingStudents);
     renderFlashcards(shuffled);
     
-    // Optional: Update counter to ensure it stays in sync
     updateCounter();
 });
 
@@ -255,7 +307,6 @@ function resetAppState() {
     currentStudentList = [];
     zip = new JSZip();
 
-    // Reset UI Elements
     document.getElementById('status').innerText = "";
     document.getElementById('json-display').textContent = "[]";
     document.getElementById('download-the-files').classList.add('d-none');
@@ -280,7 +331,6 @@ function updateDisplay() {
     display.textContent = jsonStr;
     if (window.Prism) Prism.highlightElement(display);
 
-    // Show the Download section now that data exists
     document.getElementById('download-the-files').classList.remove('d-none');
 }
 
@@ -296,7 +346,6 @@ function shuffleArray(array) {
     return array;
 }
 
-// Download Handlers (ZIP & JSON)
 document.getElementById('download-json').addEventListener('click', () => {
     const blob = new Blob([JSON.stringify(extractedData, null, 4)], { type: 'application/json' });
     const link = document.createElement('a');
